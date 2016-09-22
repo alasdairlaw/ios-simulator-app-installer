@@ -37,7 +37,7 @@ class Packaging {
 
             let productFolder = "\(packageLauncherPath)/build"
             let productPath = "\(productFolder)/Release/app-package-launcher.app"
-            let packagedAppFlag = "\"PACKAGED_APP=\(fullAppPath)\""
+            let packagedAppFlag = "PACKAGED_APP=\(fullAppPath)"
             let targetDeviceFlag = deviceIdentifier != nil ? "\"TARGET_DEVICE=\(deviceIdentifier!)\"" : ""
             let uninstallFlag = shouldUninstall ? "UNINSTALL=1" : ""
 
@@ -48,7 +48,13 @@ class Packaging {
                 "-project", "\(packageLauncherPath)/app-package-launcher.xcodeproj",
                 packagedAppFlag,
                 targetDeviceFlag,
-                uninstallFlag
+                uninstallFlag,
+            ].filter({ $0 != "" })
+            task.outputOptions = [
+                .print(prefix: "OUT")
+            ]
+            task.errorOptions = [
+                .print(prefix: "ERR")
             ]
 
             print("command:", task.command)
